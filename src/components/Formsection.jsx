@@ -28,13 +28,13 @@ export const Formsection = ({ onClose }) => {
         {
           method: "GET",
           headers: {
-                    accept: "application/json",
-                    apikey: "k-8f7aa4ea-a0c7-42ac-a821-a342d21887fe",
-                    token:
-                      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1LTFhODJlYjQ1LTdmMjAtNDM0ZC1hODUxLWUyNTExOWIwMjE0MCIsImlhdCI6MTcxOTU5NzQ4MiwiZXhwIjoxNzIwMjAyMjgyfQ.QnFUFe_pllXj3eOupIZ6yfKR95m9VNAhSvMoFdKJWlY",
-                    userid: "u-1a82eb45-7f20-434d-a851-e25119b02140",
-                    "content-type": "application/json",
-                  },
+            accept: "application/json",
+            apikey: "k-8f7aa4ea-a0c7-42ac-a821-a342d21887fe",
+            token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJ1LTFhODJlYjQ1LTdmMjAtNDM0ZC1hODUxLWUyNTExOWIwMjE0MCIsImlhdCI6MTcxOTU5NzQ4MiwiZXhwIjoxNzIwMjAyMjgyfQ.QnFUFe_pllXj3eOupIZ6yfKR95m9VNAhSvMoFdKJWlY",
+            userid: "u-1a82eb45-7f20-434d-a851-e25119b02140",
+            "content-type": "application/json",
+          },
         }
       );
       const data = await response.json();
@@ -84,7 +84,7 @@ export const Formsection = ({ onClose }) => {
       );
 
       const result = await response.json();
-      console.log(result); // Log the response for debugging
+      // console.log(result); 
       if (result.success) {
         alert("Form Submitted successfully");
         onClose();
@@ -104,9 +104,12 @@ export const Formsection = ({ onClose }) => {
       (page - 1) * FIELDS_PER_PAGE,
       page * FIELDS_PER_PAGE
     );
-    const isValid = currentFields.every(
-      (field) => inputForm[field.title] && inputForm[field.title].trim() !== ""
-    );
+    const isValid = currentFields.every((field) => {
+      if (field.isRequired) {
+        return inputForm[field.title] && inputForm[field.title].trim() !== "";
+      }
+      return true; 
+    });
     setForward(isValid);
   };
 
@@ -168,7 +171,26 @@ export const Formsection = ({ onClose }) => {
     ));
   };
 
-  const handleNext = () => setPage(page + 1);
+  // const handleNext = () => setPage(page + 1);
+  const handleNext = () => {
+    const currentFields = formFields.slice(
+      (page - 1) * FIELDS_PER_PAGE,
+      page * FIELDS_PER_PAGE
+    );
+    const isValid = currentFields.every((field) => {
+      if (field.isRequired) {
+        return inputForm[field.title] && inputForm[field.title].trim() !== "";
+      }
+      return true;
+    });
+
+    if (isValid) {
+      setPage(page + 1);
+    } else {
+      alert("Please fill out all required fields before proceeding.");
+    }
+  };
+
   const handleBack = () => setPage(page - 1);
   const handleClose = () => {
     setdesign(true);
