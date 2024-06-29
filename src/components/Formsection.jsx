@@ -84,7 +84,7 @@ export const Formsection = ({ onClose }) => {
       );
 
       const result = await response.json();
-      // console.log(result); 
+      // console.log(result);
       if (result.success) {
         alert("Form Submitted successfully");
         onClose();
@@ -108,7 +108,7 @@ export const Formsection = ({ onClose }) => {
       if (field.isRequired) {
         return inputForm[field.title] && inputForm[field.title].trim() !== "";
       }
-      return true; 
+      return true;
     });
     setForward(isValid);
   };
@@ -227,11 +227,14 @@ export const Formsection = ({ onClose }) => {
                   key={i}
                   className={`${
                     page === i + 1
-                      ? "text-purple-600 font-bold"
-                      : "text-gray-400"
+                      ? "text-gray-700 text-sm"
+                      : "text-gray-700 text-sm"
                   }`}
                 >
-                  Page {i + 1}
+                  {/* Page {i + 1} */}
+                  {i + 1 === 1
+                    ? `${i + 1}. YOUR DETAILS`
+                    : `${i + 1}. YOUR BUSINESS`}
                 </span>
               ))}
             </div>
